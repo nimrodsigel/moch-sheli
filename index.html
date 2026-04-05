@@ -364,6 +364,10 @@
       <input type="text" class="config-input" id="webhookUrl" placeholder="https://hook.eu2.make.com/...">
     </div>
     <div class="config-row">
+      <div class="config-label">DOC WEBHOOK URL (Doc2Brain)</div>
+      <input type="text" class="config-input" id="docWebhookUrl" placeholder="https://hook.eu2.make.com/...">
+    </div>
+    <div class="config-row">
       <div class="config-label">IMAGE WEBHOOK URL (Image2Brain)</div>
       <input type="text" class="config-input" id="imageWebhookUrl" placeholder="https://hook.eu2.make.com/...">
     </div>
@@ -451,14 +455,16 @@
     try {
       const c = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
       if (c.webhookUrl) document.getElementById('webhookUrl').value = c.webhookUrl;
+      if (c.docWebhookUrl) document.getElementById('docWebhookUrl').value = c.docWebhookUrl;
       if (c.imageWebhookUrl) document.getElementById('imageWebhookUrl').value = c.imageWebhookUrl;
     } catch(e) {}
   }
 
   function saveConfig() {
     const url = document.getElementById('webhookUrl').value.trim();
+    const docUrl = document.getElementById('docWebhookUrl').value.trim();
     const imgUrl = document.getElementById('imageWebhookUrl').value.trim();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ webhookUrl: url, imageWebhookUrl: imgUrl }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ webhookUrl: url, docWebhookUrl: docUrl, imageWebhookUrl: imgUrl }));
     showToast('✅ הגדרות נשמרו', 'success');
     toggleConfig();
   }
@@ -620,6 +626,19 @@
 
     if (!text) {
       showToast('✏️ נא לכתוב טקסט או להעלות קובץ', 'error');
+      return;
+    }
+
+    // DOCX goes to Doc2Brain, text goes to Text2Brain
+    const isDocxFile = document.getElementById('fileName').textContent.match(/\.docx$/i);
+    if (fileContent && isDocxFile) {
+      const docWebhookUrl = config.docWebhookUrl;
+      if (!docWebhookUrl) {
+        showToast('⚙️ נא להגדיר Doc Webhook URL', 'error');
+        document.getElementById('configPanel').classList.add('open');
+        return;
+      }
+      await sendText(docWebhookUrl, text);
       return;
     }
 
