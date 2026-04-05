@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="המוח שלי">
+<link rel="manifest" href="manifest.json">
+<title>המוח שלי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a25;
+    --bg4: #22222f;
+    --border: #2a2a3a;
+    --border-bright: #3d3d55;
+    --accent: #7c6aff;
+    --accent2: #a855f7;
+    --accent-glow: rgba(124, 106, 255, 0.25);
+    --text: #e8e8f0;
+    --text2: #9999b3;
+    --text3: #5a5a7a;
+    --success: #22d3a3;
+    --warning: #f59e0b;
+    --error: #f43f5e;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Heebo', sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124,106,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    padding: 24px 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+
+  .logo { display: flex; align-items: center; gap: 10px; }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .logo-text {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .logo-sub {
+    font-size: 11px; color: var(--text3);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px; text-transform: uppercase; margin-top: 1px;
+  }
+
+  .status-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--success); box-shadow: 0 0 8px var(--success);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  .section-label {
+    font-size: 11px; font-family: 'Space Mono', monospace;
+    color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px;
+  }
+
+  .quick-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+
+  .quick-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px;
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 100px;
+    color: var(--text2); font-size: 13px; font-family: 'Heebo', sans-serif;
+    cursor: pointer; transition: all 0.18s ease; white-space: nowrap;
+  }
+
+  .quick-btn:hover, .quick-btn.active {
+    background: var(--bg4); border-color: var(--accent);
+    color: var(--text); box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  .quick-btn .icon { font-size: 14px; }
+
+  .input-card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 16px; transition: border-color 0.2s;
+  }
+
+  .input-card:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+  .text-input {
+    width: 100%; background: transparent; border: none; outline: none;
+    color: var(--text); font-family: 'Heebo', sans-serif;
+    font-size: 16px; line-height: 1.7; resize: none; min-height: 140px;
+    direction: rtl; caret-color: var(--accent);
+  }
+
+  .text-input::placeholder { color: var(--text3); }
+
+  .input-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border);
+  }
+
+  .char-count { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
+
+  .clear-btn {
+    background: none; border: none; color: var(--text3); font-size: 12px;
+    cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm);
+    transition: all 0.15s; font-family: 'Heebo', sans-serif;
+  }
+
+  .clear-btn:hover { color: var(--error); background: rgba(244,63,94,0.1); }
+
+  /* Upload zone – supports both files and images */
+  .upload-zone {
+    border: 1.5px dashed var(--border); border-radius: var(--radius);
+    padding: 20px; text-align: center; cursor: pointer;
+    transition: all 0.2s; margin-bottom: 16px; background: var(--bg2);
+  }
+
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--accent); background: rgba(124,106,255,0.05);
+  }
+
+  .upload-zone input { display: none; }
+  .upload-icon { font-size: 24px; margin-bottom: 6px; }
+
+  .upload-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+  .upload-text span {
+    color: var(--accent); cursor: pointer;
+    text-decoration: underline; text-decoration-style: dotted;
+  }
+
+  /* Image preview */
+  .image-preview-wrap {
+    display: none; margin-bottom: 16px;
+    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+  }
+
+  .image-preview-wrap.visible { display: block; }
+
+  .image-preview-wrap img {
+    width: 100%; max-height: 280px; object-fit: contain;
+    background: var(--bg2); display: block;
+  }
+
+  .image-preview-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; background: var(--bg3);
+  }
+
+  .image-preview-bar span { font-size: 13px; color: var(--success); flex: 1; }
+  .image-preview-bar button { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; }
+
+  .file-preview {
+    display: none; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: rgba(34,211,163,0.08); border: 1px solid rgba(34,211,163,0.2);
+    border-radius: var(--radius-sm); margin-bottom: 16px;
+  }
+
+  .file-preview.visible { display: flex; }
+  .file-preview .file-name { font-size: 13px; color: var(--success); flex: 1; }
+  .file-preview .remove-file { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; }
+
+  /* Shared banner */
+  .shared-banner {
+    display: none; align-items: center; gap: 10px;
+    padding: 12px 16px; margin-bottom: 16px;
+    background: rgba(124,106,255,0.12); border: 1px solid rgba(124,106,255,0.3);
+    border-radius: var(--radius-sm); font-size: 13px; color: var(--accent);
+  }
+
+  .shared-banner.visible { display: flex; }
+
+  .send-btn {
+    width: 100%; padding: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; border-radius: var(--radius); color: white;
+    font-size: 16px; font-weight: 700; font-family: 'Heebo', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    letter-spacing: 0.3px; box-shadow: 0 4px 20px var(--accent-glow); margin-bottom: 24px;
+  }
+
+  .send-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(124,106,255,0.4); }
+  .send-btn:active:not(:disabled) { transform: translateY(0); }
+  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .send-btn.loading {
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--text2); box-shadow: none;
+  }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    padding: 12px 22px; border-radius: 100px; font-size: 14px; font-weight: 500;
+    display: flex; align-items: center; gap: 8px;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100; white-space: nowrap; max-width: 90vw;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: rgba(34,211,163,0.15); border: 1px solid rgba(34,211,163,0.3); color: var(--success); }
+  .toast.error { background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--error); }
+
+  .log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .log-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .log-item {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 12px 14px;
+    display: flex; align-items: flex-start; gap: 10px; animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .log-item .log-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+  .log-item .log-text { font-size: 13px; color: var(--text2); flex: 1; line-height: 1.5; }
+  .log-item .log-time { font-size: 11px; color: var(--text3); font-family: 'Space Mono', monospace; flex-shrink: 0; }
+  .log-item.success { border-color: rgba(34,211,163,0.2); }
+  .log-item.error { border-color: rgba(244,63,94,0.2); }
+
+  .clear-log {
+    background: none; border: none; color: var(--text3); font-size: 12px;
+    cursor: pointer; font-family: 'Heebo', sans-serif;
+    padding: 4px 8px; border-radius: var(--radius-sm); transition: all 0.15s;
+  }
+
+  .clear-log:hover { color: var(--text2); background: var(--bg3); }
+
+  .config-toggle {
+    display: flex; align-items: center; gap: 8px;
+    background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+    padding: 8px 14px; color: var(--text3); font-size: 12px;
+    font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.15s; margin-bottom: 16px;
+  }
+
+  .config-toggle:hover { color: var(--text2); border-color: var(--border-bright); }
+
+  .config-panel {
+    display: none; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
+  }
+
+  .config-panel.open { display: block; }
+  .config-row { margin-bottom: 14px; }
+
+  .config-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; font-family: 'Space Mono', monospace; }
+
+  .config-input {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
+    font-size: 13px; font-family: 'Space Mono', monospace;
+    outline: none; direction: ltr; transition: border-color 0.15s;
+  }
+
+  .config-input:focus { border-color: var(--accent); }
+
+  .config-save {
+    padding: 8px 18px; background: var(--accent); border: none;
+    border-radius: var(--radius-sm); color: white; font-size: 13px;
+    font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.15s;
+  }
+
+  .config-save:hover { background: var(--accent2); }
+
+  .log-empty { text-align: center; padding: 24px; color: var(--text3); font-size: 13px; }
+
+  @media (max-width: 480px) {
+    .quick-btn { font-size: 12px; padding: 7px 11px; }
+    .text-input { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🧠</div>
+      <div>
+        <div class="logo-text">המוח שלי</div>
+        <div class="logo-sub">My Brain · ALUT HR</div>
+      </div>
+    </div>
+    <div class="status-dot">
+      <div class="dot"></div>
+      <span>פעיל</span>
+    </div>
+  </header>
+
+  <!-- Shared content banner -->
+  <div class="shared-banner" id="sharedBanner">
+    📲 תוכן שותף התקבל – מוכן לשליחה
+  </div>
+
+  <!-- Config -->
+  <button class="config-toggle" onclick="toggleConfig()">⚙️ הגדרות Webhook</button>
+
+  <div class="config-panel" id="configPanel">
+    <div class="config-row">
+      <div class="config-label">TEXT WEBHOOK URL (Text2Brain)</div>
+      <input type="text" class="config-input" id="webhookUrl" placeholder="https://hook.eu2.make.com/...">
+    </div>
+    <div class="config-row">
+      <div class="config-label">IMAGE WEBHOOK URL (Image2Brain)</div>
+      <input type="text" class="config-input" id="imageWebhookUrl" placeholder="https://hook.eu2.make.com/...">
+    </div>
+    <button class="config-save" onclick="saveConfig()">שמור</button>
+  </div>
+
+  <!-- Quick buttons -->
+  <div class="section-label">קיצורי דרך</div>
+  <div class="quick-buttons">
+    <button class="quick-btn" onclick="insertQuick('פגישה עם ')"><span class="icon">📅</span> פגישה</button>
+    <button class="quick-btn" onclick="insertQuick('להכין ')"><span class="icon">✅</span> משימה</button>
+    <button class="quick-btn" onclick="insertQuick('רעיון: ')"><span class="icon">💡</span> רעיון</button>
+    <button class="quick-btn" onclick="insertQuick('לדבר עם ')"><span class="icon">💬</span> שיחה</button>
+    <button class="quick-btn" onclick="insertQuick('לבדוק ')"><span class="icon">🔍</span> לבדוק</button>
+    <button class="quick-btn" onclick="insertQuick('דד ליין ')"><span class="icon">⏰</span> דד ליין</button>
+  </div>
+
+  <!-- Text input -->
+  <div class="section-label">הזנת טקסט</div>
+  <div class="input-card">
+    <textarea class="text-input" id="mainInput"
+      placeholder="כתוב כאן מה יש לך במוח... פגישה עם מישהו, משימה דחופה, רעיון חדש, תזכורת..."
+      oninput="updateCharCount()"></textarea>
+    <div class="input-footer">
+      <span class="char-count" id="charCount">0 תווים</span>
+      <button class="clear-btn" onclick="clearInput()">נקה</button>
+    </div>
+  </div>
+
+  <!-- File / Image upload -->
+  <div class="section-label">העלאת קובץ או תמונה</div>
+  <div class="upload-zone" id="uploadZone"
+    onclick="document.getElementById('fileInput').click()"
+    ondragover="handleDragOver(event)"
+    ondragleave="handleDragLeave(event)"
+    ondrop="handleDrop(event)">
+    <input type="file" id="fileInput" accept=".txt,.md,.csv,.docx,image/*" onchange="handleFileSelect(event)">
+    <div class="upload-icon">📎</div>
+    <div class="upload-text">
+      גרור קובץ או תמונה לכאן או <span>לחץ לבחור</span><br>
+      <small style="color: var(--text3)">TXT, MD, CSV, DOCX, תמונות (JPG, PNG)</small>
+    </div>
+  </div>
+
+  <!-- Image preview -->
+  <div class="image-preview-wrap" id="imagePreviewWrap">
+    <img id="imagePreview" src="" alt="תצוגה מקדימה">
+    <div class="image-preview-bar">
+      <span id="imageFileName">תמונה</span>
+      <button onclick="removeImage()">✕</button>
+    </div>
+  </div>
+
+  <!-- File preview -->
+  <div class="file-preview" id="filePreview">
+    <span>📄</span>
+    <span class="file-name" id="fileName"></span>
+    <button class="remove-file" onclick="removeFile()">✕</button>
+  </div>
+
+  <!-- Send button -->
+  <button class="send-btn" id="sendBtn" onclick="sendToWebhook()">
+    <span id="sendIcon">🚀</span>
+    <span id="sendText">שלח למוח</span>
+  </button>
+
+  <!-- Log -->
+  <div class="log-header">
+    <div class="section-label" style="margin-bottom:0">היסטוריה</div>
+    <button class="clear-log" onclick="clearLog()">נקה הכל</button>
+  </div>
+  <div class="log-list" id="logList">
+    <div class="log-empty" id="logEmpty">עדיין לא נשלח כלום 🌙</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const STORAGE_KEY = 'moch_sheli_config';
+  const LOG_KEY = 'moch_sheli_log';
+
+  // ── Config ───────────────────────────────────────────
+  function loadConfig() {
+    try {
+      const c = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      if (c.webhookUrl) document.getElementById('webhookUrl').value = c.webhookUrl;
+      if (c.imageWebhookUrl) document.getElementById('imageWebhookUrl').value = c.imageWebhookUrl;
+    } catch(e) {}
+  }
+
+  function saveConfig() {
+    const url = document.getElementById('webhookUrl').value.trim();
+    const imgUrl = document.getElementById('imageWebhookUrl').value.trim();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ webhookUrl: url, imageWebhookUrl: imgUrl }));
+    showToast('✅ הגדרות נשמרו', 'success');
+    toggleConfig();
+  }
+
+  function getConfig() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch(e) { return {}; }
+  }
+
+  function toggleConfig() {
+    document.getElementById('configPanel').classList.toggle('open');
+  }
+
+  // ── Quick buttons ────────────────────────────────────
+  function insertQuick(text) {
+    const el = document.getElementById('mainInput');
+    const pos = el.selectionStart;
+    const current = el.value;
+    el.value = current.slice(0, pos) + text + current.slice(pos);
+    el.focus();
+    el.selectionStart = el.selectionEnd = pos + text.length;
+    updateCharCount();
+  }
+
+  function updateCharCount() {
+    const len = document.getElementById('mainInput').value.length;
+    document.getElementById('charCount').textContent = len + ' תווים';
+  }
+
+  function clearInput() {
+    document.getElementById('mainInput').value = '';
+    updateCharCount();
+  }
+
+  // ── File & Image handling ────────────────────────────
+  let fileContent = null;
+  let imageFile = null;
+
+  function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (file) processFile(file);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    document.getElementById('uploadZone').classList.add('dragover');
+  }
+
+  function handleDragLeave(e) {
+    document.getElementById('uploadZone').classList.remove('dragover');
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('uploadZone').classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) processFile(file);
+  }
+
+  function processFile(file) {
+    if (file.type.startsWith('image/')) {
+      loadImage(file);
+    } else {
+      readTextFile(file);
+    }
+  }
+
+  function loadImage(file) {
+    imageFile = file;
+    const url = URL.createObjectURL(file);
+    document.getElementById('imagePreview').src = url;
+    document.getElementById('imageFileName').textContent = file.name;
+    document.getElementById('imagePreviewWrap').classList.add('visible');
+    showToast('✅ תמונה נטענה – מוכן לשליחה', 'success');
+  }
+
+  function removeImage() {
+    imageFile = null;
+    document.getElementById('imagePreview').src = '';
+    document.getElementById('imagePreviewWrap').classList.remove('visible');
+    document.getElementById('fileInput').value = '';
+  }
+
+  function readTextFile(file) {
+    const isDocx = file.name.match(/\.docx$/i);
+    const isText = file.type.match('text.*') || file.name.match(/\.(txt|md|csv)$/i);
+
+    if (!isDocx && !isText) {
+      showToast('❌ נא להעלות TXT, MD, CSV, DOCX או תמונה', 'error');
+      return;
+    }
+
+    if (isDocx) {
+      showToast('⏳ קורא קובץ Word...', 'success');
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const result = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+          fileContent = result.value.trim();
+          document.getElementById('fileName').textContent = file.name;
+          document.getElementById('filePreview').classList.add('visible');
+          if (!document.getElementById('mainInput').value.trim()) {
+            document.getElementById('mainInput').value = fileContent.slice(0, 2000);
+            updateCharCount();
+          }
+          showToast('✅ קובץ Word נטען', 'success');
+        } catch(err) {
+          showToast('❌ שגיאה בקריאת קובץ Word', 'error');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        fileContent = e.target.result;
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('filePreview').classList.add('visible');
+        if (!document.getElementById('mainInput').value.trim()) {
+          document.getElementById('mainInput').value = fileContent.slice(0, 2000);
+          updateCharCount();
+        }
+      };
+      reader.readAsText(file, 'UTF-8');
+    }
+  }
+
+  function removeFile() {
+    fileContent = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('filePreview').classList.remove('visible');
+  }
+
+  // ── Send ─────────────────────────────────────────────
+  async function sendToWebhook() {
+    const config = getConfig();
+
+    // Image mode
+    if (imageFile) {
+      const imageWebhookUrl = config.imageWebhookUrl;
+      if (!imageWebhookUrl) {
+        showToast('⚙️ נא להגדיר Image Webhook URL', 'error');
+        document.getElementById('configPanel').classList.add('open');
+        return;
+      }
+      await sendImage(imageWebhookUrl);
+      return;
+    }
+
+    // Text mode
+    const webhookUrl = config.webhookUrl;
+    if (!webhookUrl) {
+      showToast('⚙️ נא להגדיר Webhook URL תחילה', 'error');
+      document.getElementById('configPanel').classList.add('open');
+      return;
+    }
+
+    const textInput = document.getElementById('mainInput').value.trim();
+    const text = fileContent || textInput;
+
+    if (!text) {
+      showToast('✏️ נא לכתוב טקסט או להעלות קובץ', 'error');
+      return;
+    }
+
+    await sendText(webhookUrl, text);
+  }
+
+  async function sendText(webhookUrl, text) {
+    setLoading(true);
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+
+      if (response.ok || response.status === 200) {
+        showToast('✅ נשלח למוח בהצלחה!', 'success');
+        addLog('success', text.slice(0, 80) + (text.length > 80 ? '...' : ''));
+        clearInput();
+        removeFile();
+      } else {
+        throw new Error('HTTP ' + response.status);
+      }
+    } catch(err) {
+      showToast('❌ שגיאה: ' + err.message, 'error');
+      addLog('error', 'שגיאה: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function sendImage(webhookUrl) {
+    setLoading(true);
+    try {
+      // Convert image to base64
+      const base64 = await fileToBase64(imageFile);
+      const context = document.getElementById('mainInput').value.trim();
+
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          image: base64,
+          mimeType: imageFile.type,
+          fileName: imageFile.name,
+          context: context || ''
+        })
+      });
+
+      if (response.ok || response.status === 200) {
+        showToast('✅ תמונה נשלחה למוח!', 'success');
+        addLog('success', 'תמונה: ' + imageFile.name);
+        removeImage();
+        clearInput();
+      } else {
+        throw new Error('HTTP ' + response.status);
+      }
+    } catch(err) {
+      showToast('❌ שגיאה: ' + err.message, 'error');
+      addLog('error', 'שגיאה: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function setLoading(on) {
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+    document.getElementById('sendIcon').innerHTML = on ? '<div class="spinner"></div>' : '🚀';
+    document.getElementById('sendText').textContent = on ? 'שולח...' : 'שלח למוח';
+  }
+
+  // ── Shared content (Web Share Target) ───────────────
+  async function checkSharedContent() {
+    try {
+      const cache = await caches.open('moch-sheli-v1');
+      const response = await cache.match('/moch-sheli/shared-data');
+      if (!response) return;
+
+      const data = await response.json();
+      await cache.delete('/moch-sheli/shared-data');
+
+      document.getElementById('sharedBanner').classList.add('visible');
+
+      if (data.hasFile && data.fileData) {
+        const bytes = new Uint8Array(data.fileData);
+        const blob = new Blob([bytes], { type: data.fileType });
+        const file = new File([blob], data.fileName, { type: data.fileType });
+
+        if (data.fileType.startsWith('image/')) {
+          loadImage(file);
+        } else {
+          readTextFile(file);
+        }
+      } else if (data.text) {
+        document.getElementById('mainInput').value = data.text;
+        updateCharCount();
+      }
+    } catch(e) {}
+  }
+
+  // ── Log ──────────────────────────────────────────────
+  function addLog(type, text) {
+    const log = getLog();
+    const now = new Date();
+    const time = now.toLocaleTimeString('he-IL', { hour:'2-digit', minute:'2-digit' });
+    log.unshift({ type, text, time });
+    if (log.length > 30) log.pop();
+    localStorage.setItem(LOG_KEY, JSON.stringify(log));
+    renderLog();
+  }
+
+  function getLog() {
+    try { return JSON.parse(localStorage.getItem(LOG_KEY) || '[]'); }
+    catch(e) { return []; }
+  }
+
+  function renderLog() {
+    const log = getLog();
+    const container = document.getElementById('logList');
+    const empty = document.getElementById('logEmpty');
+
+    if (log.length === 0) {
+      empty.style.display = 'block';
+      [...container.children].forEach(c => { if (c !== empty) c.remove(); });
+      return;
+    }
+
+    empty.style.display = 'none';
+    [...container.children].forEach(c => { if (c !== empty) c.remove(); });
+
+    log.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'log-item ' + item.type;
+      el.innerHTML = `
+        <span class="log-icon">${item.type === 'success' ? '✅' : '❌'}</span>
+        <span class="log-text">${escapeHtml(item.text)}</span>
+        <span class="log-time">${item.time}</span>
+      `;
+      container.appendChild(el);
+    });
+  }
+
+  function clearLog() {
+    localStorage.removeItem(LOG_KEY);
+    renderLog();
+  }
+
+  function escapeHtml(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Toast ────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg, type = 'success') {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast ' + type;
+    clearTimeout(toastTimer);
+    setTimeout(() => el.classList.add('show'), 10);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+  }
+
+  // ── Service Worker ───────────────────────────────────
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/moch-sheli/sw.js')
+      .then(() => checkSharedContent())
+      .catch(() => {});
+  }
+
+  // ── Init ─────────────────────────────────────────────
+  loadConfig();
+  renderLog();
+
+  if (location.search.includes('shared=1')) {
+    checkSharedContent();
+  }
+
+  document.getElementById('mainInput').addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') sendToWebhook();
+  });
+</script>
+</body>
+</html>
