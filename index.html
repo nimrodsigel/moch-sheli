@@ -3,35 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#0a0a0f">
+<meta name="theme-color" content="#f5f0e8">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="המוח שלי">
 <link rel="manifest" href="manifest.json">
 <title>המוח שלי</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 
 <style>
   :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #1a1a25;
-    --bg4: #22222f;
-    --border: #2a2a3a;
-    --border-bright: #3d3d55;
-    --accent: #7c6aff;
-    --accent2: #a855f7;
-    --accent-glow: rgba(124, 106, 255, 0.25);
-    --text: #e8e8f0;
-    --text2: #9999b3;
-    --text3: #5a5a7a;
-    --success: #22d3a3;
-    --warning: #f59e0b;
-    --error: #f43f5e;
-    --radius: 14px;
-    --radius-sm: 8px;
+    --bg:       #f5f0e8;
+    --bg2:      #ede8de;
+    --bg3:      #e4ddd2;
+    --bg4:      #d9d1c4;
+    --border:   #c8bfb0;
+    --border-bright: #b0a595;
+    --accent:   #5c4fc7;
+    --accent2:  #8b5cf6;
+    --accent-glow: rgba(92, 79, 199, 0.18);
+    --text:     #2a2420;
+    --text2:    #5a5048;
+    --text3:    #9a9088;
+    --success:  #1a9e72;
+    --warning:  #c47c0a;
+    --error:    #c0394a;
+    --radius:   16px;
+    --radius-sm: 10px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -49,8 +49,8 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(124,106,255,0.08) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 50%);
+      radial-gradient(ellipse 70% 50% at 10% 0%, rgba(92,79,199,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(139,92,246,0.05) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
   }
@@ -61,47 +61,46 @@
     min-height: 100vh;
     max-width: 680px;
     margin: 0 auto;
-    padding: 0 16px 40px;
+    padding: 0 18px 48px;
     display: flex;
     flex-direction: column;
   }
 
   header {
-    padding: 24px 0 20px;
+    padding: 28px 0 22px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 28px;
+    border-bottom: 1.5px solid var(--border);
+    margin-bottom: 32px;
   }
 
-  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo { display: flex; align-items: center; gap: 12px; }
 
   .logo-icon {
-    width: 38px; height: 38px;
+    width: 44px; height: 44px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 0 20px var(--accent-glow);
+    font-size: 20px;
+    box-shadow: 0 4px 16px var(--accent-glow);
   }
 
   .logo-text {
-    font-size: 20px; font-weight: 700; letter-spacing: -0.5px;
-    background: linear-gradient(135deg, var(--text), var(--accent));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+    color: var(--text);
   }
 
   .logo-sub {
     font-size: 11px; color: var(--text3);
     font-family: 'Space Mono', monospace;
-    letter-spacing: 1px; text-transform: uppercase; margin-top: 1px;
+    letter-spacing: 1px; text-transform: uppercase; margin-top: 2px;
   }
 
-  .status-dot { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text3); }
+  .status-dot { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text3); }
 
   .dot {
-    width: 7px; height: 7px; border-radius: 50%;
+    width: 8px; height: 8px; border-radius: 50%;
     background: var(--success); box-shadow: 0 0 8px var(--success);
     animation: pulse 2s infinite;
   }
@@ -109,38 +108,43 @@
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
   .section-label {
-    font-size: 11px; font-family: 'Space Mono', monospace;
+    font-size: 12px; font-family: 'Space Mono', monospace;
     color: var(--text3); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px;
   }
 
-  .quick-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+  .quick-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
 
   .quick-btn {
     display: flex; align-items: center; gap: 6px;
-    padding: 8px 14px;
-    background: var(--bg3); border: 1px solid var(--border); border-radius: 100px;
-    color: var(--text2); font-size: 13px; font-family: 'Heebo', sans-serif;
+    padding: 9px 16px;
+    background: var(--bg2); border: 1.5px solid var(--border); border-radius: 100px;
+    color: var(--text2); font-size: 14px; font-family: 'Heebo', sans-serif;
     cursor: pointer; transition: all 0.18s ease; white-space: nowrap;
   }
 
   .quick-btn:hover, .quick-btn.active {
-    background: var(--bg4); border-color: var(--accent);
-    color: var(--text); box-shadow: 0 0 12px var(--accent-glow);
+    background: white; border-color: var(--accent);
+    color: var(--accent); box-shadow: 0 2px 12px var(--accent-glow);
   }
 
-  .quick-btn .icon { font-size: 14px; }
+  .quick-btn .icon { font-size: 15px; }
 
   .input-card {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 20px; margin-bottom: 16px; transition: border-color 0.2s;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 22px; margin-bottom: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
 
-  .input-card:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+  .input-card:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow), 0 2px 8px rgba(0,0,0,0.04);
+  }
 
   .text-input {
     width: 100%; background: transparent; border: none; outline: none;
     color: var(--text); font-family: 'Heebo', sans-serif;
-    font-size: 16px; line-height: 1.7; resize: none; min-height: 140px;
+    font-size: 17px; line-height: 1.75; resize: none; min-height: 140px;
     direction: rtl; caret-color: var(--accent);
   }
 
@@ -154,28 +158,81 @@
   .char-count { font-size: 12px; color: var(--text3); font-family: 'Space Mono', monospace; }
 
   .clear-btn {
-    background: none; border: none; color: var(--text3); font-size: 12px;
-    cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm);
+    background: none; border: none; color: var(--text3); font-size: 13px;
+    cursor: pointer; padding: 4px 10px; border-radius: var(--radius-sm);
     transition: all 0.15s; font-family: 'Heebo', sans-serif;
   }
 
-  .clear-btn:hover { color: var(--error); background: rgba(244,63,94,0.1); }
+  .clear-btn:hover { color: var(--error); background: rgba(192,57,74,0.08); }
 
-  /* Upload zone – supports both files and images */
+  /* Voice recording button */
+  .voice-section {
+    margin-bottom: 16px;
+  }
+
+  .voice-btn {
+    width: 100%; padding: 16px;
+    background: white; border: 1.5px dashed var(--border);
+    border-radius: var(--radius); color: var(--text2);
+    font-size: 16px; font-family: 'Heebo', sans-serif;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .voice-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(92,79,199,0.04); }
+
+  .voice-btn.recording {
+    background: rgba(192,57,74,0.06);
+    border-color: var(--error);
+    border-style: solid;
+    color: var(--error);
+    animation: recordPulse 1.2s infinite;
+  }
+
+  @keyframes recordPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(192,57,74,0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(192,57,74,0); }
+  }
+
+  .voice-btn .mic-icon { font-size: 20px; }
+
+  .voice-timer {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    display: none;
+  }
+
+  .voice-btn.recording .voice-timer { display: inline; }
+
+  .voice-transcript {
+    display: none;
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: rgba(26,158,114,0.08);
+    border: 1px solid rgba(26,158,114,0.25);
+    border-radius: var(--radius-sm);
+    font-size: 15px; color: var(--text2); line-height: 1.6;
+  }
+
+  .voice-transcript.visible { display: block; }
+
+  /* Upload zone */
   .upload-zone {
     border: 1.5px dashed var(--border); border-radius: var(--radius);
-    padding: 20px; text-align: center; cursor: pointer;
-    transition: all 0.2s; margin-bottom: 16px; background: var(--bg2);
+    padding: 22px; text-align: center; cursor: pointer;
+    transition: all 0.2s; margin-bottom: 16px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
 
   .upload-zone:hover, .upload-zone.dragover {
-    border-color: var(--accent); background: rgba(124,106,255,0.05);
+    border-color: var(--accent); background: rgba(92,79,199,0.04);
   }
 
   .upload-zone input { display: none; }
-  .upload-icon { font-size: 24px; margin-bottom: 6px; }
-
-  .upload-text { font-size: 13px; color: var(--text2); line-height: 1.6; }
+  .upload-icon { font-size: 26px; margin-bottom: 8px; }
+  .upload-text { font-size: 14px; color: var(--text2); line-height: 1.7; }
 
   .upload-text span {
     color: var(--accent); cursor: pointer;
@@ -185,7 +242,8 @@
   /* Image preview */
   .image-preview-wrap {
     display: none; margin-bottom: 16px;
-    border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
 
   .image-preview-wrap.visible { display: block; }
@@ -197,139 +255,147 @@
 
   .image-preview-bar {
     display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px; background: var(--bg3);
+    padding: 10px 16px; background: var(--bg3);
   }
 
-  .image-preview-bar span { font-size: 13px; color: var(--success); flex: 1; }
+  .image-preview-bar span { font-size: 14px; color: var(--success); flex: 1; }
   .image-preview-bar button { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; }
 
   .file-preview {
     display: none; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    background: rgba(34,211,163,0.08); border: 1px solid rgba(34,211,163,0.2);
+    padding: 12px 16px;
+    background: rgba(26,158,114,0.08); border: 1.5px solid rgba(26,158,114,0.25);
     border-radius: var(--radius-sm); margin-bottom: 16px;
   }
 
   .file-preview.visible { display: flex; }
-  .file-preview .file-name { font-size: 13px; color: var(--success); flex: 1; }
+  .file-preview .file-name { font-size: 14px; color: var(--success); flex: 1; }
   .file-preview .remove-file { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; }
 
   /* Shared banner */
   .shared-banner {
     display: none; align-items: center; gap: 10px;
-    padding: 12px 16px; margin-bottom: 16px;
-    background: rgba(124,106,255,0.12); border: 1px solid rgba(124,106,255,0.3);
-    border-radius: var(--radius-sm); font-size: 13px; color: var(--accent);
+    padding: 14px 18px; margin-bottom: 16px;
+    background: rgba(92,79,199,0.08); border: 1.5px solid rgba(92,79,199,0.25);
+    border-radius: var(--radius-sm); font-size: 14px; color: var(--accent);
   }
 
   .shared-banner.visible { display: flex; }
 
   .send-btn {
-    width: 100%; padding: 16px;
+    width: 100%; padding: 18px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border: none; border-radius: var(--radius); color: white;
-    font-size: 16px; font-weight: 700; font-family: 'Heebo', sans-serif;
+    font-size: 17px; font-weight: 700; font-family: 'Heebo', sans-serif;
     cursor: pointer; transition: all 0.2s;
     display: flex; align-items: center; justify-content: center; gap: 8px;
-    letter-spacing: 0.3px; box-shadow: 0 4px 20px var(--accent-glow); margin-bottom: 24px;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 24px var(--accent-glow);
+    margin-bottom: 28px;
   }
 
-  .send-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(124,106,255,0.4); }
+  .send-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(92,79,199,0.35); }
   .send-btn:active:not(:disabled) { transform: translateY(0); }
-  .send-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .send-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
   .send-btn.loading {
-    background: var(--bg3); border: 1px solid var(--border);
+    background: var(--bg3); border: 1.5px solid var(--border);
     color: var(--text2); box-shadow: none;
   }
 
   .spinner {
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.35); border-top-color: white;
     border-radius: 50%; animation: spin 0.7s linear infinite;
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .toast {
-    position: fixed; bottom: 24px; left: 50%;
+    position: fixed; bottom: 28px; left: 50%;
     transform: translateX(-50%) translateY(80px);
-    padding: 12px 22px; border-radius: 100px; font-size: 14px; font-weight: 500;
+    padding: 13px 24px; border-radius: 100px; font-size: 15px; font-weight: 500;
     display: flex; align-items: center; gap: 8px;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 100; white-space: nowrap; max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   }
 
   .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { background: rgba(34,211,163,0.15); border: 1px solid rgba(34,211,163,0.3); color: var(--success); }
-  .toast.error { background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3); color: var(--error); }
+  .toast.success { background: white; border: 1.5px solid rgba(26,158,114,0.3); color: var(--success); }
+  .toast.error { background: white; border: 1.5px solid rgba(192,57,74,0.3); color: var(--error); }
 
   .log-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .log-list { display: flex; flex-direction: column; gap: 8px; }
 
   .log-item {
-    background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 12px 14px;
-    display: flex; align-items: flex-start; gap: 10px; animation: slideIn 0.3s ease;
+    background: white; border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 10px;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   }
 
   @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
-  .log-item .log-icon { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
-  .log-item .log-text { font-size: 13px; color: var(--text2); flex: 1; line-height: 1.5; }
+  .log-item .log-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+  .log-item .log-text { font-size: 14px; color: var(--text2); flex: 1; line-height: 1.5; }
   .log-item .log-time { font-size: 11px; color: var(--text3); font-family: 'Space Mono', monospace; flex-shrink: 0; }
-  .log-item.success { border-color: rgba(34,211,163,0.2); }
-  .log-item.error { border-color: rgba(244,63,94,0.2); }
+  .log-item.success { border-color: rgba(26,158,114,0.25); }
+  .log-item.error { border-color: rgba(192,57,74,0.25); }
 
   .clear-log {
-    background: none; border: none; color: var(--text3); font-size: 12px;
+    background: none; border: none; color: var(--text3); font-size: 13px;
     cursor: pointer; font-family: 'Heebo', sans-serif;
-    padding: 4px 8px; border-radius: var(--radius-sm); transition: all 0.15s;
+    padding: 4px 10px; border-radius: var(--radius-sm); transition: all 0.15s;
   }
 
   .clear-log:hover { color: var(--text2); background: var(--bg3); }
 
   .config-toggle {
     display: flex; align-items: center; gap: 8px;
-    background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    padding: 8px 14px; color: var(--text3); font-size: 12px;
-    font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.15s; margin-bottom: 16px;
+    background: none; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    padding: 9px 16px; color: var(--text3); font-size: 13px;
+    font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.15s; margin-bottom: 18px;
   }
 
-  .config-toggle:hover { color: var(--text2); border-color: var(--border-bright); }
+  .config-toggle:hover { color: var(--text2); border-color: var(--border-bright); background: white; }
 
   .config-panel {
-    display: none; background: var(--bg2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 18px; margin-bottom: 20px;
+    display: none; background: white; border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 22px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   }
 
   .config-panel.open { display: block; }
-  .config-row { margin-bottom: 14px; }
+  .config-row { margin-bottom: 16px; }
 
-  .config-label { font-size: 12px; color: var(--text3); margin-bottom: 6px; font-family: 'Space Mono', monospace; }
+  .config-label { font-size: 12px; color: var(--text3); margin-bottom: 7px; font-family: 'Space Mono', monospace; }
 
   .config-input {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 10px 12px; color: var(--text);
+    width: 100%; background: var(--bg2); border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm); padding: 11px 14px; color: var(--text);
     font-size: 13px; font-family: 'Space Mono', monospace;
     outline: none; direction: ltr; transition: border-color 0.15s;
   }
 
-  .config-input:focus { border-color: var(--accent); }
+  .config-input:focus { border-color: var(--accent); background: white; }
 
   .config-save {
-    padding: 8px 18px; background: var(--accent); border: none;
-    border-radius: var(--radius-sm); color: white; font-size: 13px;
+    padding: 9px 20px; background: var(--accent); border: none;
+    border-radius: var(--radius-sm); color: white; font-size: 14px;
     font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.15s;
+    font-weight: 600;
   }
 
   .config-save:hover { background: var(--accent2); }
 
-  .log-empty { text-align: center; padding: 24px; color: var(--text3); font-size: 13px; }
+  .log-empty { text-align: center; padding: 28px; color: var(--text3); font-size: 14px; }
 
   @media (max-width: 480px) {
-    .quick-btn { font-size: 12px; padding: 7px 11px; }
-    .text-input { font-size: 15px; }
+    .quick-btn { font-size: 13px; padding: 8px 12px; }
+    .text-input { font-size: 16px; }
+    .send-btn { font-size: 16px; padding: 16px; }
   }
 </style>
 </head>
@@ -371,6 +437,10 @@
       <div class="config-label">IMAGE WEBHOOK URL (Image2Brain)</div>
       <input type="text" class="config-input" id="imageWebhookUrl" placeholder="https://hook.eu2.make.com/...">
     </div>
+    <div class="config-row">
+      <div class="config-label">VOICE WEBHOOK URL (Voice2Brain)</div>
+      <input type="text" class="config-input" id="voiceWebhookUrl" placeholder="https://hook.eu2.make.com/...">
+    </div>
     <button class="config-save" onclick="saveConfig()">שמור</button>
   </div>
 
@@ -383,6 +453,17 @@
     <button class="quick-btn" onclick="insertQuick('לדבר עם ')"><span class="icon">💬</span> שיחה</button>
     <button class="quick-btn" onclick="insertQuick('לבדוק ')"><span class="icon">🔍</span> לבדוק</button>
     <button class="quick-btn" onclick="insertQuick('דד ליין ')"><span class="icon">⏰</span> דד ליין</button>
+  </div>
+
+  <!-- Voice recording -->
+  <div class="section-label">הקלטה קולית</div>
+  <div class="voice-section">
+    <button class="voice-btn" id="voiceBtn" onclick="toggleRecording()">
+      <span class="mic-icon">🎙️</span>
+      <span id="voiceBtnText">לחץ להקלטה</span>
+      <span class="voice-timer" id="voiceTimer">00:00</span>
+    </button>
+    <div class="voice-transcript" id="voiceTranscript"></div>
   </div>
 
   <!-- Text input -->
@@ -457,6 +538,7 @@
       if (c.webhookUrl) document.getElementById('webhookUrl').value = c.webhookUrl;
       if (c.docWebhookUrl) document.getElementById('docWebhookUrl').value = c.docWebhookUrl;
       if (c.imageWebhookUrl) document.getElementById('imageWebhookUrl').value = c.imageWebhookUrl;
+      if (c.voiceWebhookUrl) document.getElementById('voiceWebhookUrl').value = c.voiceWebhookUrl;
     } catch(e) {}
   }
 
@@ -464,7 +546,11 @@
     const url = document.getElementById('webhookUrl').value.trim();
     const docUrl = document.getElementById('docWebhookUrl').value.trim();
     const imgUrl = document.getElementById('imageWebhookUrl').value.trim();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ webhookUrl: url, docWebhookUrl: docUrl, imageWebhookUrl: imgUrl }));
+    const voiceUrl = document.getElementById('voiceWebhookUrl').value.trim();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      webhookUrl: url, docWebhookUrl: docUrl,
+      imageWebhookUrl: imgUrl, voiceWebhookUrl: voiceUrl
+    }));
     showToast('✅ הגדרות נשמרו', 'success');
     toggleConfig();
   }
@@ -497,6 +583,121 @@
   function clearInput() {
     document.getElementById('mainInput').value = '';
     updateCharCount();
+  }
+
+  // ── Voice Recording ──────────────────────────────────
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let recordingTimer = null;
+  let recordingSeconds = 0;
+  let isRecording = false;
+
+  async function toggleRecording() {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      await startRecording();
+    }
+  }
+
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        stream.getTracks().forEach(t => t.stop());
+        await sendVoice(audioBlob);
+      };
+
+      mediaRecorder.start();
+      isRecording = true;
+      recordingSeconds = 0;
+
+      const btn = document.getElementById('voiceBtn');
+      btn.classList.add('recording');
+      document.getElementById('voiceBtnText').textContent = 'מקליט... לחץ לעצור';
+
+      recordingTimer = setInterval(() => {
+        recordingSeconds++;
+        const m = String(Math.floor(recordingSeconds / 60)).padStart(2, '0');
+        const s = String(recordingSeconds % 60).padStart(2, '0');
+        document.getElementById('voiceTimer').textContent = m + ':' + s;
+      }, 1000);
+
+    } catch(err) {
+      showToast('❌ לא ניתן לגשת למיקרופון', 'error');
+    }
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      isRecording = false;
+      clearInterval(recordingTimer);
+
+      const btn = document.getElementById('voiceBtn');
+      btn.classList.remove('recording');
+      document.getElementById('voiceBtnText').textContent = 'מעבד הקלטה...';
+      document.getElementById('voiceTimer').textContent = '00:00';
+    }
+  }
+
+  async function sendVoice(audioBlob) {
+    const config = getConfig();
+    const voiceWebhookUrl = config.voiceWebhookUrl;
+
+    if (!voiceWebhookUrl) {
+      showToast('⚙️ נא להגדיר Voice Webhook URL', 'error');
+      document.getElementById('configPanel').classList.add('open');
+      document.getElementById('voiceBtnText').textContent = 'לחץ להקלטה';
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const base64 = await blobToBase64(audioBlob);
+      const context = document.getElementById('mainInput').value.trim();
+
+      const response = await fetch(voiceWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          audio: base64,
+          mimeType: 'audio/webm',
+          context: context || ''
+        })
+      });
+
+      if (response.ok || response.status === 200) {
+        showToast('✅ הקלטה נשלחה למוח!', 'success');
+        addLog('success', '🎙️ הקלטה קולית נשלחה');
+        clearInput();
+      } else {
+        throw new Error('HTTP ' + response.status);
+      }
+    } catch(err) {
+      showToast('❌ שגיאה: ' + err.message, 'error');
+      addLog('error', 'שגיאה בשליחת הקלטה: ' + err.message);
+    } finally {
+      setLoading(false);
+      document.getElementById('voiceBtnText').textContent = 'לחץ להקלטה';
+    }
+  }
+
+  function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
 
   // ── File & Image handling ────────────────────────────
@@ -601,7 +802,6 @@
   async function sendToWebhook() {
     const config = getConfig();
 
-    // Image mode
     if (imageFile) {
       const imageWebhookUrl = config.imageWebhookUrl;
       if (!imageWebhookUrl) {
@@ -613,7 +813,6 @@
       return;
     }
 
-    // Text mode
     const webhookUrl = config.webhookUrl;
     if (!webhookUrl) {
       showToast('⚙️ נא להגדיר Webhook URL תחילה', 'error');
@@ -629,7 +828,6 @@
       return;
     }
 
-    // DOCX goes to Doc2Brain, text goes to Text2Brain
     const isDocxFile = document.getElementById('fileName').textContent.match(/\.docx$/i);
     if (fileContent && isDocxFile) {
       const docWebhookUrl = config.docWebhookUrl;
@@ -673,7 +871,6 @@
   async function sendImage(webhookUrl) {
     setLoading(true);
     try {
-      // Convert image to base64
       const base64 = await fileToBase64(imageFile);
       const context = document.getElementById('mainInput').value.trim();
 
@@ -721,7 +918,7 @@
     document.getElementById('sendText').textContent = on ? 'שולח...' : 'שלח למוח';
   }
 
-  // ── Shared content (Web Share Target) ───────────────
+  // ── Shared content ───────────────────────────────────
   async function checkSharedContent() {
     try {
       const cache = await caches.open('moch-sheli-v1');
@@ -737,7 +934,6 @@
         const bytes = new Uint8Array(data.fileData);
         const blob = new Blob([bytes], { type: data.fileType });
         const file = new File([blob], data.fileName, { type: data.fileType });
-
         if (data.fileType.startsWith('image/')) {
           loadImage(file);
         } else {
